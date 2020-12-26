@@ -55,7 +55,7 @@ void HotkeyHandler::StartUpdate()
 	Update();
 }
 
-void HotkeyHandler::HandleCLockEvent(bool& isClockActive,std::time_t start)
+void HotkeyHandler::HandleClockEvent(bool& isClockActive, std::time_t& start, bool triggerStamp)
 {
 	std::time_t now = std::time(0);
 	tm* localTime = localtime(&now);
@@ -64,6 +64,24 @@ void HotkeyHandler::HandleCLockEvent(bool& isClockActive,std::time_t start)
 
 	std::string dateStamp = Util::GetFormattedTimestamp(localTime, tfCLOCK | tfSECONDS);
 	std::string yearStamp = Util::GetFormattedTimestamp(localTime, tfYEAR | tfMONTH | tfDAY);
+
+
+	if (isClockActive && triggerStamp) {
+		auto AddStamp = [&start](std::string filePath) {
+			std::time_t now = std::time(0);
+			time_t diffInSeconds = static_cast<time_t>(difftime(mktime(localtime(&now)), start));
+			tm* localTime = gmtime(&diffInSeconds);
+
+			std::stringstream strBuffer;
+
+			strBuffer << "     " << localTime->tm_hour << " : " << localTime->tm_min << " : " << localTime->tm_sec << std::endl;
+
+			FileHandler::WriteFile(filePath.c_str(), strBuffer.str().c_str());
+		};
+		AddStamp(yearStamp);
+
+		return;
+	}
 
 	if (!isClockActive) {
 		FileHandler::WriteFile(yearStamp.c_str(), dateStamp.c_str());
@@ -80,11 +98,17 @@ void HotkeyHandler::HandleCLockEvent(bool& isClockActive,std::time_t start)
 	PlaySound(L"MouseClick", NULL, SND_SYNC);
 }
 
-const void HotkeyHandler::AddStamp(const std::time_t start)
-{
-	std::time_t now = std::time(0);
-	difftime(start, mktime(localtime(&now)));
-}
+//const void HotkeyHandler::AddStamp(const std::time_t& start)
+//{
+//	std::time_t now = std::time(0);
+//	time_t diffInSeconds = static_cast<time_t>(difftime(mktime(localtime(&now)), start));
+//	tm* localTime = gmtime(&diffInSeconds);
+//
+//	std::stringstream strBuffer;
+//
+//	strBuffer << localTime->tm_hour << " : " << localTime->tm_min << " : " << localTime->tm_sec << std::endl;
+//
+//}
 
 void HotkeyHandler::Update()
 {
@@ -99,13 +123,12 @@ void HotkeyHandler::Update()
 			switch (msg.wParam)
 			{
 			case Constants::Buttons::TOGGLE_START_BTN:
-				HandleCLockEvent(isClockActive, start);
+				HandleClockEvent(isClockActive, start, false);
 				break;
 
 			case Constants::Buttons::TIMESTAMP_BTN:
 				if (!isClockActive)break;
-
-				AddStamp(start);
+				HandleClockEvent(isClockActive, start, true);
 				break;
 
 			default:
