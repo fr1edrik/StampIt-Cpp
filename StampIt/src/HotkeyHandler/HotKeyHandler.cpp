@@ -21,21 +21,6 @@ HotkeyHandler::~HotkeyHandler()
 	UnregisterHotKey(NULL, 2);
 }
 
-//bool HotkeyHandler::RegisterNewHotKey(unsigned int key)
-//{
-//	if (RegisterHotKey(
-//		NULL,
-//		1,
-//		MOD_ALT | MOD_NOREPEAT,
-//		0x42
-//	))
-//	{
-//		return true;
-//	}
-//
-//	return false;
-//}
-
 void HotkeyHandler::StartUpdate()
 {
 	RegisterHotKey(
@@ -74,7 +59,7 @@ void HotkeyHandler::HandleClockEvent(bool& isClockActive, std::time_t& start, bo
 
 			std::stringstream strBuffer;
 
-			strBuffer << "     " << localTime->tm_hour << " : " << localTime->tm_min << " : " << localTime->tm_sec << std::endl;
+			strBuffer << "     " << localTime->tm_hour << ":" << localTime->tm_min << ":" << localTime->tm_sec;
 
 			FileHandler::WriteFile(filePath.c_str(), strBuffer.str().c_str());
 		};
@@ -97,18 +82,6 @@ void HotkeyHandler::HandleClockEvent(bool& isClockActive, std::time_t& start, bo
 
 	PlaySound(L"MouseClick", NULL, SND_SYNC);
 }
-
-//const void HotkeyHandler::AddStamp(const std::time_t& start)
-//{
-//	std::time_t now = std::time(0);
-//	time_t diffInSeconds = static_cast<time_t>(difftime(mktime(localtime(&now)), start));
-//	tm* localTime = gmtime(&diffInSeconds);
-//
-//	std::stringstream strBuffer;
-//
-//	strBuffer << localTime->tm_hour << " : " << localTime->tm_min << " : " << localTime->tm_sec << std::endl;
-//
-//}
 
 void HotkeyHandler::Update()
 {
