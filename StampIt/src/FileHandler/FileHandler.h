@@ -4,6 +4,6 @@
 class FileHandler
 {
 public:
-	static void WriteFile(const char* relativeFilePath, const char* content, const bool timeEnded);
+	static void WriteFile(const char* relativeFilePath, const char* content);
 };
 

@@ -23,6 +23,7 @@
     <ClInclude Include="src\HotkeyHandler\HotKeyHandler.h" />
     <ClInclude Include="src\Components\cMainPage.h" />
     <ClInclude Include="src\cApp.h" />
+    <ClInclude Include="src\Util\Constants.h" />
     <ClInclude Include="src\Util\Util.h" />
   </ItemGroup>
   <ItemGroup>

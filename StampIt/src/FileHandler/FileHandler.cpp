@@ -9,11 +9,10 @@
 
 const static std::string basePath = std::string(getenv("USERPROFILE")) + "\\Desktop\\";
 
-void FileHandler::WriteFile(const char* relativeFilePath = "", const char* content = "", const bool timeEnded = false)
+void FileHandler::WriteFile(const char* relativeFilePath = "", const char* content = "")
 {
 	if (strlen(content) == 0) return;
 
-	const char* endl = timeEnded ? "\n" : " - ";
 
 	auto pathWQualifier = std::string(relativeFilePath) + ".txt";
 
@@ -26,7 +25,7 @@ void FileHandler::WriteFile(const char* relativeFilePath = "", const char* conte
 	try
 	{
 		file.open(fullPath, std::ios::app);
-		file << content << endl;
+		file << content << "\n";
 		file.close();
 	}
 	catch (const std::exception& e)

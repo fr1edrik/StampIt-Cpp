@@ -14,7 +14,7 @@ public:
 
 private:
 	void Update();
-	void HandleCLockEvent(bool& isClockActive);
-
+	void HandleCLockEvent(bool& isClockActive, std::time_t start);
+	const void AddStamp(const std::time_t start);
 };
 
