@@ -50,31 +50,33 @@ void HotkeyHandler::HandleClockEvent(bool& isClockActive, std::time_t& start, bo
 	std::string dateStamp = Util::GetFormattedTimestamp(localTime, tfCLOCK | tfSECONDS);
 	std::string yearStamp = Util::GetFormattedTimestamp(localTime, tfYEAR | tfMONTH | tfDAY);
 
-
 	if (isClockActive && triggerStamp) {
-		auto AddStamp = [&start](std::string filePath) {
+		auto AddStamp = [&start](const std::string filePath) {
 			std::time_t now = std::time(0);
 			time_t diffInSeconds = static_cast<time_t>(difftime(mktime(localtime(&now)), start));
 			tm* localTime = gmtime(&diffInSeconds);
 
 			std::stringstream strBuffer;
 
-			strBuffer << "     " << localTime->tm_hour << ":" << localTime->tm_min << ":" << localTime->tm_sec;
+			constexpr auto Format = &Util::GetParsedTime;
+			constexpr auto indendToken = "     ";
+			strBuffer << indendToken << Format(localTime->tm_hour) << ":" << Format(localTime->tm_min) << ":" << Format(localTime->tm_sec);
 
 			FileHandler::WriteFile(filePath.c_str(), strBuffer.str().c_str());
 		};
+
 		AddStamp(yearStamp);
 
 		return;
 	}
 
 	if (!isClockActive) {
-		FileHandler::WriteFile(yearStamp.c_str(), dateStamp.c_str());
+		FileHandler::WriteFile(yearStamp.c_str(), (dateStamp+">").c_str());
 		isClockActive = true;
 	}
 	else
 	{
-		FileHandler::WriteFile(yearStamp.c_str(), dateStamp.c_str());
+		FileHandler::WriteFile(yearStamp.c_str(), ("<"+dateStamp).c_str());
 		start = NULL;
 		delete localTime;
 		isClockActive = false;
