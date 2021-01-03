@@ -9,16 +9,17 @@ public:
 	~cMainPage();
 
 protected:
-	wxChoice* m_choice1;
-	wxTextCtrl* m_textCtrl1;
+	wxButton* m_button3;
+	wxChoice* m_choice2;
 	wxButton* m_button1;
 
 public:
-	void OnApplyBtnClicked(wxCommandEvent& evt);
+	void OnSaveBtnClicked(wxCommandEvent& evt);
+	void OnHotkeyBtnClicked(wxCommandEvent& evt);
 	wxDECLARE_EVENT_TABLE();
 	
 private:
-	std::unique_ptr<HotkeyHandler> hotkeyHandler_ = nullptr;
+	std::unique_ptr<HotkeyHandler> HotkeyHandler_ = nullptr;
 	void SetupUI();
 };
 
